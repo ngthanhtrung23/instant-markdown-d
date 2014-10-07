@@ -17,6 +17,13 @@ function httpHandler(req, res) {
     case 'GET':
       // Example: /my-repo/raw/master/sub-dir/some.png
       var githubUrl = req.url.match(/\/[^\/]+\/raw\/[^\/]+\/(.+)/);
+      var isImage = req.url.match(/\.(png|jpg|jpeg|bmp)/);
+      if (isImage) {
+          send(req, req.url)
+            .root(process.cwd())
+            .pipe(res);
+        return ;
+      }
       if (githubUrl) {
          // Serve the file out of the current working directory
         send(req, githubUrl[1])
